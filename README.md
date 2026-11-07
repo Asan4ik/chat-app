@@ -14,12 +14,17 @@ Design patterns final project: a Java messaging app combining six design pattern
 
 Factory creates messages, Decorators process them (Strategy provides the encryption algorithm), the Adapter sends them over XMPP or REST, Observer notifies receivers, and the Facade is the entry point used by `Main`.
 
-## Build
+## Run (Docker only, nothing else to install)
+
+Requires only Docker.
 
 ```
-mvn clean test
-mvn compile exec:java -Dexec.mainClass=kz.aitu.chat.Main
+docker compose run --rm dev     # compile and run from source
+docker compose run --rm test    # run unit tests
+docker compose run --rm app     # build the final image and run the jar
 ```
+
+The `dev` and `test` services mount the project folder, so edit code in any editor and re-run the command. Maven dependencies are cached in a Docker volume after the first run.
 
 ## Workflow
 

@@ -1,0 +1,26 @@
+services:
+  app:
+    build: .
+    stdin_open: true
+    tty: true
+
+  dev:
+    image: maven:3.9-eclipse-temurin-17
+    working_dir: /app
+    volumes:
+      - .:/app
+      - m2-cache:/root/.m2
+    command: sh -c "mvn -q compile && java -cp target/classes kz.aitu.chat.Main"
+    stdin_open: true
+    tty: true
+
+  test:
+    image: maven:3.9-eclipse-temurin-17
+    working_dir: /app
+    volumes:
+      - .:/app
+      - m2-cache:/root/.m2
+    command: mvn test
+
+volumes:
+  m2-cache:
