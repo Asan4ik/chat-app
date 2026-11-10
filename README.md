@@ -12,7 +12,21 @@ Design patterns final project: a Java messaging app combining six design pattern
 
 ## How it fits together
 
-Factory creates messages, Decorators process them (Strategy provides the encryption algorithm), the Adapter sends them over XMPP or REST, Observer notifies receivers, and the Facade is the entry point used by `Main`.
+Factory creates messages, Decorators process them (Strategy provides the encryption algorithm), the Adapter sends them over XMPP or REST, Observer notifies receivers, and the Facade is the entry point used by the CLI.
+
+`ChatFacade.send` runs the whole pipeline: validate, create (Factory), log and encrypt (Decorators + Strategy), send (Adapter), decrypt and publish to subscribers (Observer). Transport and encryption can be swapped at runtime. `sendAsync` queues sends on a single worker thread and keeps their order; all pipeline access is serialized, so the non-thread-safe transport clients are safe to share.
+
+## Try it
+
+`Main` starts an interactive CLI with three participants (Asanali, Sanzhar, Mansur). Type text to send it, or use commands:
+
+```
+/help  /users  /join <name>  /leave <name>  /as <name>
+/type text|image|system   /encrypt none|caesar|base64   /transport rest|xmpp
+/inbox [name]   /wire   /burst <n>   /quit
+```
+
+Example: `/encrypt caesar`, `/transport xmpp`, `hello`, then `/wire` shows the encrypted text on the wire while `/inbox Sanzhar` shows plaintext.
 
 ## Run (Docker only, nothing else to install)
 
